@@ -1,0 +1,19 @@
+FROM oven/bun:latest
+
+WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl
+
+ARG DATABASE_URL
+COPY package*.json bun.lock turbo.json ./
+COPY ./packages ./packages
+RUN bun install
+
+COPY ./apps/web ./apps/web
+
+ENV DATABASE_URL=${DATABASE_URL}
+RUN bun run db:generate
+RUN bun run build
+
+EXPOSE 3000
+
+CMD ["bun", "run", "start:web"]
