@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Chekout the code
+      - name: Checkout the code
         uses: actions/checkout@v2
 
       - name: Docker login
@@ -20,7 +20,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./docker/Dockerfile.backend
           push: true
           tags: ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:${{github.sha}}
           
