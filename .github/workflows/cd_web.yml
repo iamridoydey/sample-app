@@ -1,4 +1,4 @@
-name: Deploy the Backend
+name: Deploy the Web
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./docker/Dockerfile.frontend
+          file: ./docker/Dockerfile.web
           build-args: |
             DATABASE_URL=${{secrets.DATABASE_URL}}
           push: true
