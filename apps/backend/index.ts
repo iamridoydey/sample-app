@@ -5,13 +5,17 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Sample App!");
+});
+
 app.get("/users", (req, res) => {
   prismaClient.user
     .findMany()
-    .then((users:any) => {
+    .then((users: any) => {
       res.json(users);
     })
-    .catch((err:any) => {
+    .catch((err: any) => {
       res.status(500).json({ error: err.message });
     });
 });
@@ -31,10 +35,10 @@ app.post("/user", (req, res) => {
         password,
       },
     })
-    .then((user:any) => {
+    .then((user: any) => {
       res.status(201).json(user);
     })
-    .catch((err:any) => {
+    .catch((err: any) => {
       res.status(500).json({ error: err.message });
     });
 });
