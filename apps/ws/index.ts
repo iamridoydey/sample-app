@@ -1,7 +1,7 @@
 import { prismaClient } from "db/client";
 
 Bun.serve({
-  port: 8082,
+  port: 8081,
   fetch(req, server) {
     if (server.upgrade(req)) {
       return;

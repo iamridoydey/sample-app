@@ -4,13 +4,13 @@ WORKDIR /app
 RUN apt-get update -y && apt-get install -y openssl
 
 COPY package*.json bun.lock turbo.json ./
-COPY packages ./packages
-RUN bun install
+COPY ./packages ./packages
+RUN bun install && bun add prisma @prisma/client
 
 COPY ./apps/ws ./apps/ws
 
 RUN bun run db:generate
 
-EXPOSE 8082
+EXPOSE 8081
 
-CMD ["bun", "run", "start:ws"]
+CMD ["sh", "-c", "bun run db:migrate && bun run db:generate && bun run start:ws"]
