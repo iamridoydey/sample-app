@@ -23,4 +23,6 @@ jobs:
           context: .
           file: ./docker/Dockerfile.backend
           push: true
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:${{github.sha}}
+          tags: |
+            ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest
+            ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:${{ github.run_number }}
