@@ -32,4 +32,17 @@ jobs:
           echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
           mkdir -p /home/runner/.ssh
           chmod 600 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.SERVER_IP}} "docker pull ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest && docker stop sample_backend && docker rm sample_backend && docker run -d --name sample_backend -p 8080:8080 ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest"
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.SERVER_IP}} "
+          docker pull ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest &&
+          
+          if [ \$(docker ps -aq -f name=sample_backend) ]; then
+            echo 'Stopping existing container...'
+            docker stop sample_backend &&
+            docker rm sample_backend
+          else
+            echo 'No existing container found, skipping stop/remove.'
+          fi &&
+          
+          docker run -d --name sample_backend -p 8080:8080 ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest
+          "
+          echo "Deployment completed"
