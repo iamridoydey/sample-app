@@ -26,3 +26,10 @@ jobs:
           tags: |
             ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest
             ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:${{ github.run_number }}
+      - name: Deploy to the vm
+        run: |
+          echo "Deploying to the vm"
+          echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
+          mkdir -p /home/runner/.ssh
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.SERVER_IP}} "docker pull ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest && docker stop sample_backend && docker rm sample_backend && docker run -d --name sample_backend -p 8080:8080 ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest"
