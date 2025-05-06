@@ -43,6 +43,6 @@ jobs:
             echo 'No existing container found, skipping stop/remove.'
           fi &&
           
-          docker run -d --name sample_backend -p 8080:8080 ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest
+          docker run -d --name sample_backend -e DATABASE_URL=${{secrets.DATABASE_URL}} -p 8080:8080 ${{secrets.DOCKERHUB_USERNAME}}/sample_backend:latest
           "
           echo "Deployment completed"
